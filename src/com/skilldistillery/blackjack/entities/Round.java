@@ -33,12 +33,12 @@ public enum Round implements BlackjackStages {
 				table.getDealer().dealTo(table.getDealer().hands.get(0));
 				System.out.println("Dealing to dealer");
 			}
-			checkScore(table.getDealer().hands.get(0));
+			checkScore(table.getDealer().hands.get(0), table);
 			System.out.println("*** Dealer ***");
 			System.out.println(table.getDealer().hands.get(0).toString());
 			for (BlackjackPlayer player : table.getPlayers()) {
 				if (player.hands.get(0) != null) {
-					checkScore(player.hands.get(0));
+					checkScore(player.hands.get(0), table);
 					System.out.println("*** " + player.getName() + " ***");
 					System.out.println(player.hands.get(0).toString());
 				}
@@ -57,7 +57,7 @@ public enum Round implements BlackjackStages {
 					} else {
 						for (int i = 0; i < player.hands.size(); i++) {
 							if (player.hands.get(i).getValue() > 0) {
-								checkScore(player.hands.get(i));
+								checkScore(player.hands.get(i), table);
 								System.out.println("Hand " + i + ": " + player.hands.get(i).toString());
 							}
 						}
@@ -70,7 +70,7 @@ public enum Round implements BlackjackStages {
 		public void execute(Table table) {
 			while (table.getDealer().hands.get(0).getValue() < 17) {
 				table.tryMove(Move.HIT, table.getDealer());
-				checkScore(table.getDealer().hands.get(0));
+				checkScore(table.getDealer().hands.get(0), table);
 				System.out.println("Dealer hand: " + table.getDealer().hands.get(0).toString());
 			}
 			System.out.println("Dealer hand: " + table.getDealer().hands.get(0).toString());
@@ -94,10 +94,10 @@ public enum Round implements BlackjackStages {
 					}
 				}
 				if (loseBet == true && winBet == false) {
-					System.out.println("You lose!");
+					System.out.println("You lose! Dealer wins!");
 					player.resetBet();
 				} else if (loseBet == false && winBet == true) {
-					System.out.println("You won!");
+					System.out.println("You won! Dealer lost!");
 					player.addToPurseValue(2 * player.getBet());
 				} else {
 					System.out.println("Tie with dealer!");
@@ -147,11 +147,15 @@ public enum Round implements BlackjackStages {
 		return Move.values()[selection - 1];
 	}
 
-	public void checkScore(BlackjackHand hand) {
+	public void checkScore(BlackjackHand hand, Table table) {
 		if (hand.getValue() == 21) {
 			hand.markBlackjack();
+			System.out.println("Blackjack! Game over!");
+			table.setRound(Round.SETTLE_UP);
 		} else if (hand.getValue() > 21) {
 			hand.markBust();
+			System.out.println("Bust! Game over!");
+			table.setRound(Round.SETTLE_UP);
 		}
 
 	}
