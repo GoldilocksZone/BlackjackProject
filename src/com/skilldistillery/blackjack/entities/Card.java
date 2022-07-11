@@ -14,6 +14,10 @@ public class Card {
 	public int getValue() {
 		return rank.getValue();
 	}
+	
+	public Rank getRank() {
+		return rank;
+	}
 
 	@Override
 	public int hashCode() {

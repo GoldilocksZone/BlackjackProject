@@ -1,1 +1,4 @@
-# Blackjack Game# BlackjackProject
+# BlackjackProject
+# Description
+# Technologies Used
+# Lessons Learned

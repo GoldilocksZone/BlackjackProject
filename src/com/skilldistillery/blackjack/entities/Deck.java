@@ -1,8 +1,8 @@
 package com.skilldistillery.blackjack.entities;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Deck {
 	List<Card> deck = new ArrayList<Card>();
@@ -28,7 +28,7 @@ public class Deck {
 		Collections.shuffle(deck);
 	}
 	
-	public Card dealCard() {
+	public Card getCard() {
 		return this.deck.remove(0);
 	}
 }
