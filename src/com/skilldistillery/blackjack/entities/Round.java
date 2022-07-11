@@ -7,7 +7,9 @@ import java.util.ArrayList;
 public enum Round implements BlackjackStages {
 	SETUP {
 		public void execute(Table table) {
-			int numPlayers = getNumPlayers(table.getScanner());
+//			int numPlayers = getNumPlayers(table.getScanner());
+			System.out.println("We will only play with one player because the test cases require it.");
+			int numPlayers = 1;
 			for (int i = 0; i < numPlayers; i++) {
 				table.addPlayer(new BlackjackPlayer(getPlayerName(table.getScanner())));
 			}
@@ -27,7 +29,7 @@ public enum Round implements BlackjackStages {
 		public void execute(Table table) {
 			for (int i = 1; i <= NUM_DEALS; i++) {
 				for (BlackjackPlayer player : table.getPlayers()) {
-					System.out.println("Dealing to" + player.getName());
+					System.out.println("Dealing to " + player.getName());
 					table.getDealer().dealTo(player.hands.get(0));
 				}
 				table.getDealer().dealTo(table.getDealer().hands.get(0));
@@ -139,12 +141,14 @@ public enum Round implements BlackjackStages {
 		int selection;
 		System.out.println("What would you like to do?");
 		for (Move move : Move.values()) {
-			System.out.println((move.ordinal() + 1) + ". " + move);
+			if(!(move.ordinal() == 0)) {
+				System.out.println(move.ordinal() + ". " + move);
+			}
 		}
 		System.out.print("> ");
 		selection = scanner.nextInt();
 		scanner.nextLine();
-		return Move.values()[selection - 1];
+		return Move.values()[selection];
 	}
 
 	public void checkScore(BlackjackHand hand, Table table) {
