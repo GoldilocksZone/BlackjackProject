@@ -33,12 +33,15 @@ public enum Round implements BlackjackStages {
 				table.getDealer().dealTo(table.getDealer().hands.get(0));
 				System.out.println("Dealing to dealer");
 			}
-			checkScores();
+			checkScore(table.getDealer().hands.get(0));
 			System.out.println("*** Dealer ***");
 			System.out.println(table.getDealer().hands.get(0).toString());
 			for (BlackjackPlayer player : table.getPlayers()) {
-				System.out.println("*** " + player.getName() + " ***");
-				System.out.println(player.hands.get(0).toString());
+				if (player.hands.get(0) != null) {
+					checkScore(player.hands.get(0));
+					System.out.println("*** " + player.getName() + " ***");
+					System.out.println(player.hands.get(0).toString());
+				}
 			}
 		}
 	},
@@ -51,6 +54,13 @@ public enum Round implements BlackjackStages {
 					isSuccessful = table.tryMove(getPlayerMove(table.getScanner()), player);
 					if (!isSuccessful) {
 						System.out.println("Unable to perform move. Please try again.");
+					} else {
+						for (int i = 0; i < player.hands.size(); i++) {
+							if (player.hands.get(i).getValue() > 0) {
+								checkScore(player.hands.get(i));
+								System.out.println("Hand " + i + ": " + player.hands.get(i).toString());
+							}
+						}
 					}
 				}
 			}
@@ -60,20 +70,51 @@ public enum Round implements BlackjackStages {
 		public void execute(Table table) {
 			while (table.getDealer().hands.get(0).getValue() < 17) {
 				table.tryMove(Move.HIT, table.getDealer());
+				checkScore(table.getDealer().hands.get(0));
+				System.out.println("Dealer hand: " + table.getDealer().hands.get(0).toString());
 			}
+			System.out.println("Dealer hand: " + table.getDealer().hands.get(0).toString());
 		}
 
 	},
 	SETTLE_UP {
 		public void execute(Table table) {
 			for (BlackjackPlayer player : table.getPlayers()) {
-				player.resetBet();
+				boolean loseBet = false, winBet = true;
+				for (BlackjackHand hand : player.hands) {
+					if (hand.isBust()) {
+						loseBet = true;
+					} else if (!table.getDealer().hands.get(0).isBust()
+							&& hand.getValue() < table.getDealer().hands.get(0).getValue()) {
+						loseBet = true;
+					} else if (hand.getValue() == table.getDealer().hands.get(0).getValue()) {
+						winBet = false;
+					}
+				}
+				if (loseBet == true && winBet == false) {
+					System.out.println("You lose!");
+					player.resetBet();
+				} else if (loseBet == false && winBet == true) {
+					System.out.println("You won!");
+					player.addToPurseValue(2 * player.getBet());
+				} else {
+					System.out.println("Tie with dealer!");
+					player.addToPurseValue(player.getBet());
+				}
 			}
 		}
 
 	},
 	END_GAME {
 		public void execute(Table table) {
+			boolean playAgain = table.playAgain();
+			if (playAgain) {
+				table.getNewDealer();
+				for (BlackjackPlayer player : table.getPlayers()) {
+					player.clearHands();
+				}
+				table.setRound(Round.PLACE_BETS);
+			}
 		}
 	};
 
@@ -103,8 +144,13 @@ public enum Round implements BlackjackStages {
 		scanner.nextLine();
 		return Move.values()[selection - 1];
 	}
-	
-	public void checkScores(Table table) {
-		
+
+	public void checkScore(BlackjackHand hand) {
+		if (hand.getValue() == 21) {
+			hand.markBlackjack();
+		} else if (hand.getValue() > 21) {
+			hand.markBust();
+		}
+
 	}
 }

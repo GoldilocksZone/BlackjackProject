@@ -13,10 +13,12 @@ public class BlackjackApp {
 	
 	public void play() {
 		Table table = new Table();
+		System.out.println(table.getCurrentRound());
+		table.getCurrentRound().execute(table);
 		while (table.getCurrentRound() != Round.END_GAME) {
+			table.goToNextRound();
 			System.out.println(table.getCurrentRound());
 			table.getCurrentRound().execute(table);
-			table.goToNextRound();
 		}
 		table.close();
 	}

@@ -48,4 +48,8 @@ public class Moderator {
 		}
 		return this.round;
 	}
+	
+	public void setRound(Round round) {
+		this.round = round;
+	}
 }

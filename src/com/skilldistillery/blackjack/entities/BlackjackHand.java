@@ -1,12 +1,13 @@
 package com.skilldistillery.blackjack.entities;
 
 public class BlackjackHand extends Hand {
-	private boolean isSplit, isStayed, isSurrendered;
+	private boolean isSplit, isStayed, isSurrendered, isBlackjack, isBust;
 	
 	public BlackjackHand() {
 		this.isSplit = false;
 		this.isStayed = false;
 		this.isSurrendered = false;
+		this.isBlackjack = false;
 	}
 	
 	public BlackjackHand(Card card) {
@@ -23,10 +24,7 @@ public class BlackjackHand extends Hand {
 	}
 	
 	public boolean isBlackjack() {
-		if (this.cards.size() == 2 && this.getValue() == 21) {
-			return true;
-		}
-		return false;
+		return this.isBlackjack;
 	}
 	
 	public Card remove(int index) {
@@ -34,10 +32,7 @@ public class BlackjackHand extends Hand {
 	}
 	
 	public boolean isBust() {
-		if (this.getValue() > 21) {
-			return true;
-		}
-		return false;
+		return this.isBust;
 	}
 	
 	public boolean isSplit() {
@@ -62,6 +57,14 @@ public class BlackjackHand extends Hand {
 	
 	public void surrender() {
 		this.isSurrendered = true;
+	}
+	
+	public void markBlackjack() {
+		this.isBlackjack = true;
+	}
+	
+	public void markBust() {
+		this.isBust = true;
 	}
 	
 	public String toString() {
