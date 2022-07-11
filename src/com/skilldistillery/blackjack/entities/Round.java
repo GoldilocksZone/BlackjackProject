@@ -84,9 +84,11 @@ public enum Round implements BlackjackStages {
 				for (BlackjackHand hand : player.hands) {
 					if (hand.isBust()) {
 						loseBet = true;
+						winBet = false;
 					} else if (!table.getDealer().hands.get(0).isBust()
 							&& hand.getValue() < table.getDealer().hands.get(0).getValue()) {
 						loseBet = true;
+						winBet = false;
 					} else if (hand.getValue() == table.getDealer().hands.get(0).getValue()) {
 						winBet = false;
 					}
