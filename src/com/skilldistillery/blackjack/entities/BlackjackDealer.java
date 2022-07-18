@@ -7,7 +7,7 @@ public class BlackjackDealer extends BlackjackPosition {
 		this.deck = new Deck();
 	}
 	
-	public void dealTo(BlackjackHand hand) {
-		hand.addCard(deck.getCard());
+	public Card dealCard() {
+		return deck.getCard();
 	}
 }

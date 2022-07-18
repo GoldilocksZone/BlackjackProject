@@ -1,20 +1,21 @@
 package com.skilldistillery.blackjack.entities;
 
 public enum Suit {
-	HEARTS("Hearts"),
-	SPADES("Spades"),
-	CLUBS("Clubs"),
-	DIAMONDS("Diamonds");
-	
-	private String name;
-	
-	Suit (String name) {
+	HEARTS("Hearts", "♥"), SPADES("Spades", "♠"), CLUBS("Clubs", "♣"), DIAMONDS("Diamonds", "♦");
+
+	private String name, symbol;
+
+	Suit(String name, String symbol) {
 		this.name = name;
-	}
-	
-	@Override
-	public String toString() {
-		return this.name;
+		this.symbol = symbol;
 	}
 
+	public String getSymbol() {
+		return this.symbol;
+	}
+
+	@Override
+	public String toString() {
+		return this.getSymbol();
+	}
 }

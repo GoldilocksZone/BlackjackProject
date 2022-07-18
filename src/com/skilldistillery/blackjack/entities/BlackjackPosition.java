@@ -4,27 +4,40 @@ import java.util.List;
 import java.util.ArrayList;
 
 abstract class BlackjackPosition {
-	public List<BlackjackHand> hands;
-	
-	protected BlackjackPosition () {
+	protected List<BlackjackHand> hands;
+
+	protected BlackjackPosition() {
 		this.hands = new ArrayList<BlackjackHand>();
 		this.addHand(new BlackjackHand());
-		this.addHand(new BlackjackHand());
 	}
-	
+
 	protected BlackjackPosition(ArrayList<BlackjackHand> hands) {
 		this.hands = new ArrayList<BlackjackHand>(hands);
 	}
-	
-	public void addHand(BlackjackHand hand) {
+
+	protected void addHand(BlackjackHand hand) {
 		this.hands.add(hand);
 	}
-	
-	public List<BlackjackHand> getHands() {
+
+	protected List<BlackjackHand> getHands() {
 		return this.hands;
 	}
-	
-	public void clearHands() {
+
+	protected void clearHands() {
 		this.hands.clear();
+	}
+
+	protected void addCardToHand(Card card, int handIndex) {
+		this.hands.get(handIndex).addCard(card);
+	}
+
+	protected void printAllHands() {
+		if (this.hands.size() == 1) {
+			System.out.println(this.hands.get(0).toString());
+		} else {
+			for (int handIndex = 0; handIndex < this.hands.size(); handIndex++) {
+				System.out.println("Hand " + (handIndex + 1) + ": " + this.hands.get(handIndex).toString());
+			}
+		}
 	}
 }

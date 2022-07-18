@@ -1,7 +1,6 @@
 package com.skilldistillery.blackjack.app;
 
 import com.skilldistillery.blackjack.entities.*;
-import java.util.Scanner;
 
 public class BlackjackApp {
 
@@ -13,14 +12,32 @@ public class BlackjackApp {
 	
 	public void play() {
 		Table table = new Table();
-		System.out.println(table.getCurrentRound());
-		table.getCurrentRound().execute(table);
-		while (table.getCurrentRound() != Round.END_GAME) {
-			table.goToNextRound();
-			System.out.println(table.getCurrentRound());
-			table.getCurrentRound().execute(table);
+		boolean keepPlaying = true;
+		while (keepPlaying == true) {
+			table.dealIn();
+			if(!table.gameEnd()) {
+				table.playerMoves();
+			}
+			if (!table.gameEnd()) {
+				table.dealerMoves();
+			}
+			table.determineWinner();
+			keepPlaying = table.playAgain();
+			if (keepPlaying) {
+				table.refresh();
+			}
 		}
 		table.close();
+
 	}
 	
+	public void printHeader() {
+		System.out.println("*************");
+		System.out.println("* Blackjack *");
+		System.out.println("*************");
+	}
+	
+	public boolean checkGameEnd(Table table) {
+		return (table.loser != null);
+	}
 }
